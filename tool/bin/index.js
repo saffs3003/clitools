@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 import arg from 'arg';
 import chalk from 'chalk';
-const getConfig = require('../src/config/config-mgr');
-const start = require('../src/commands/start');
+import getConfig from '../src/config/config-mgr.js';
+import start from '../src/commands/start.js';
+import createLogger from '../src/logger.js';
+import Today from '../src/commands/today.js';
 
+const logger=createLogger('bin');
 try {
   const args = arg({
     '--start': Boolean,
     '--build': Boolean,
+    '--today':Boolean
   });
-
+//logger.debug("Recieved Args",args)
   if (args['--start']) {
     const config = getConfig();
     start(config);
   }
+  else if(args['--today'])
+    {
+      Today();
+    }
 } catch (e) {
-  console.log(chalk.yellow(e.message));
-  console.log();
+  // console.log(chalk.yellow(e.message));
+  logger.warning(e.message);
+ // console.log();
   usage();
 }
 
